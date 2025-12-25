@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VoidAI –- Modern SaaS</title>
+<title>VoidAI – Modern SaaS</title>
 
 <style>
 :root{
@@ -16,12 +16,18 @@
   --glow:rgba(34,211,238,.25);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,system-ui,sans-serif
+}
 
 body{
   background:radial-gradient(1200px 600px at top,#10172a,var(--bg));
   color:var(--text);
   line-height:1.6;
+  overflow-x:hidden;
 }
 
 /* NAV */
@@ -49,7 +55,6 @@ nav h1{font-weight:800}
   box-shadow:0 10px 30px rgba(0,0,0,.6);
   transition:.25s ease;
 }
-
 .profile-btn:hover{
   background:linear-gradient(135deg,var(--accent),#38bdf8);
   color:#020617;
@@ -72,17 +77,28 @@ nav h1{font-weight:800}
   margin:1.5rem auto 3rem;
   color:var(--muted)
 }
-.cta{
+
+/* BUTTONS */
+.cta,
+.price button,
+.modal-card button{
   padding:1rem 2rem;
   border-radius:14px;
   border:none;
   background:linear-gradient(135deg,var(--accent),#38bdf8);
   font-weight:800;
   cursor:pointer;
-  box-shadow:0 0 40px var(--glow)
+  box-shadow:0 0 40px var(--glow);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.cta:active,
+.price button:active,
+.modal-card button:active{
+  transform:scale(.95);
+  box-shadow:0 0 20px var(--glow);
 }
 
-/* SECTION */
+/* SECTIONS */
 .section{
   max-width:1300px;
   margin:auto;
@@ -100,12 +116,217 @@ nav h1{font-weight:800}
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:2rem
 }
+
+/* CARDS + ANIMATION BASE */
+.card,
+.price,
+.preview{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+
+.card.show,
+.price.show,
+.preview.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
 .card{
   background:linear-gradient(180deg,var(--card),#0e1324);
   border-radius:22px;
   padding:2.5rem;
   box-shadow:0 25px 60px rgba(0,0,0,.4)
 }
+.card h4{color:var(--accent);margin-bottom:.6rem}
+.card p{color:var(--muted)}
+
+/* PREVIEW */
+.preview{
+  background:var(--panel);
+  border-radius:28px;
+  padding:4rem;
+  margin-top:4rem;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)
+}
+.mock{
+  background:linear-gradient(135deg,#0f172a,#020617);
+  border-radius:20px;
+  padding:3rem;
+  text-align:center;
+  color:var(--muted)
+}
+
+/* PRICING */
+.pricing{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2.5rem
+}
+.price{
+  background:linear-gradient(180deg,#18203a,#0e1324);
+  border-radius:26px;
+  padding:3rem 2.5rem;
+  text-align:center;
+  box-shadow:0 35px 80px rgba(0,0,0,.5)
+}
+.price.popular{
+  border:1px solid var(--accent);
+  box-shadow:0 0 50px var(--glow)
+}
+.price h4{color:var(--accent)}
+.price strong{font-size:2.8rem}
+.price p{margin:1.5rem 0;color:var(--muted)}
+
+/* FINAL CTA */
+.final{
+  text-align:center;
+  padding:7rem 1rem;
+  background:radial-gradient(circle at center,var(--glow),transparent 70%)
+}
+
+/* FOOTER */
+footer{
+  background:#020617;
+  color:#cbd5f5;
+  text-align:center;
+  padding:2.5rem 1rem;
+  line-height:1.8
+}
+footer a{color:var(--accent);text-decoration:none}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999
+}
+.modal.active{display:flex}
+
+.modal-card{
+  background:linear-gradient(180deg,#18203a,#0b0f19);
+  border-radius:28px;
+  padding:3rem;
+  width:90%;
+  max-width:420px;
+  box-shadow:0 50px 120px rgba(0,0,0,.7)
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .preview{padding:2.5rem 1.5rem}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <h1>VoidAI</h1>
+  <div class="profile-btn" onclick="openLogin()">
+    👤
+  </div>
+</nav>
+
+<section class="hero">
+  <h2>Automate work. <span>Scale faster.</span></h2>
+  <p>AI-powered productivity software for startups, creators, and small teams.</p>
+  <button class="cta" id="tryFreeBtn">Try Free</button>
+</section>
+
+<section class="section">
+  <h3>Features</h3>
+  <div class="grid">
+    <div class="card reveal"><h4>AI Automation</h4><p>Automate workflows intelligently.</p></div>
+    <div class="card reveal"><h4>Unified Dashboard</h4><p>All tasks in one place.</p></div>
+    <div class="card reveal"><h4>Analytics</h4><p>Visual productivity insights.</p></div>
+    <div class="card reveal"><h4>Team Ready</h4><p>Built for collaboration.</p></div>
+  </div>
+
+  <div class="preview reveal">
+    <h4>Product Preview</h4>
+    <div class="mock">Tasks • Automation • Analytics • Team Activity</div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <h3>Pricing</h3>
+  <div class="pricing">
+    <div class="price reveal">
+      <h4>Starter</h4><strong>$0</strong>
+      <p>For individuals exploring automation.</p>
+      <button>Select</button>
+    </div>
+    <div class="price popular reveal">
+      <h4>Pro</h4><strong>$12</strong>
+      <p>For growing startups.</p>
+      <button>Select</button>
+    </div>
+    <div class="price reveal">
+      <h4>Team</h4><strong>$29</strong>
+      <p>For collaborative teams.</p>
+      <button>Select</button>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <h2>Build smarter workflows today</h2>
+  <p>No credit card required.</p>
+  <button class="cta" id="finalBtn">Get Started Free</button>
+</section>
+
+<footer>
+  <div>© Voidweb</div>
+  <div>Created by voidweb</div>
+  <div>Contact: <a href="mailto:voidweb69@gmail.com">voidweb69@gmail.com</a></div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-card" id="modalContent"></div>
+</div>
+
+<script>
+const modal=document.getElementById("modal");
+const modalContent=document.getElementById("modalContent");
+
+/* SCROLL ANIMATIONS */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+    }else{
+      entry.target.classList.remove("show");
+    }
+  });
+},{threshold:0.2});
+
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+document.getElementById("tryFreeBtn").onclick=
+document.getElementById("finalBtn").onclick=()=>{
+  document.getElementById("pricing").scrollIntoView({behavior:"smooth"});
+};
+
+function openLogin(){
+  modal.classList.add("active");
+  modalContent.innerHTML=`
+    <h3>Login / Sign Up</h3>
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+    <button onclick="closeModal()">Continue</button>
+  `;
+}
+function closeModal(){modal.classList.remove("active")}
+</script>
+
+</body>
+</html>}
 .card h4{color:var(--accent);margin-bottom:.6rem}
 .card p{color:var(--muted)}
 
